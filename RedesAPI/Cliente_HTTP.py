@@ -3,9 +3,11 @@ import httpx
 
 app = FastAPI()
 
+'''
 @app.get("/")
 def index():
     return "Hola mundo"
+'''
 
 SERVER_URL = "http://0.0.0.0:8080/data"
 
