@@ -1,0 +1,10 @@
+from pydantic import BaseModel
+from typing import Optional
+
+#modelo de post
+class Post(BaseModel):
+    #atributos
+    id: Optional[int] = None #campo opcional
+    author: str
+    date: str
+    text: str
