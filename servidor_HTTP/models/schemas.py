@@ -8,3 +8,10 @@ class Post(BaseModel):
     author: str
     date: str
     text: str
+
+#modelo de usuario
+class User(BaseModel):
+    #atributos
+    id: int
+    username: str
+    password: str
