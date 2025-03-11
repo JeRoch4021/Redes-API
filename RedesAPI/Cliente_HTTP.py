@@ -1,7 +1,7 @@
 import requests
 
 #URL del servidor FastAPI
-Servidor_URL = "http://0.0.0.0:8080"
+Servidor_URL = "http://192.168.109.1:8080"
 
 def get_posts():
     #Sirve para obtener todos los posts
@@ -35,7 +35,7 @@ def update_post():
     #Actualizar un post solicitando datos al usuario
     post_id = input("Escribe el ID del post a actualizar: ")
     autor = input("Nuevo autor: ")
-    date = input("Nueva fecha (dd-mm-aaaa): ")
+    date = input("Nueva fecha (aaaa-mm-dd): ")
     text = input("Nuevo contenido: ")
 
     post_data = {"id": int(post_id), "author": autor, "date": date, "text": text}
