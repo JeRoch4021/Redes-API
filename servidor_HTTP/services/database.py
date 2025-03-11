@@ -1,5 +1,5 @@
 from mysql import connector as conn
-from models.schemas import Post
+from models.schemas import Post, User
 
 #objeto de conexion
 class DatabaseService:
@@ -84,12 +84,11 @@ class DatabaseService:
         try:
             #obtenemos el cursor
             cursor = self._con.cursor()
-            
             #preparamos la sentencia
             sentencia = f"""
             SELECT p.id, u.username, p.message_date, p.message
             FROM users as u join messages as p on u.id = p.user_id
-            WHERE u.username = {author};
+            WHERE u.username = '{author}';
             """
             
             #ejeccion de la sentencia y obtencion de los resultados
@@ -164,6 +163,60 @@ class DatabaseService:
             return "exito al eliminar!!!"
         except conn.Error as e:
             return "error al eliminar!!!"
+        
+    def create_user(self, user:User)->str:
+        #tratamiento de errores
+        try:
+            #puntero a conexion
+            cursor = self._con.cursor()
+            
+            #sentencia de creacion
+            sentencia = "insert into users (username, password) values (%s,%s)"
+            parametros = (user.username,user.password)
+            
+            #ejecucion de la sentencia
+            cursor.execute(sentencia,parametros)
+            
+            #guardamos los cambios
+            self._con.commit()
+            return "exito al crear!!!"
+        except conn.Error as e:
+            return "error al crear!!!"
+        
+    def validate_access(self, user:User)->dict:
+        response = dict()
+        #tratamiento de errores
+        try:
+            #puntero a conexion
+            cursor = self._con.cursor()
+            
+            #sentencia
+            sentencia = f"select id, username, password from users where username = '{user.username}';"
+            
+            #ejecucion de la sentencia
+            cursor.execute(sentencia)
+            data = cursor.fetchall()
+            
+            #validacion de usuario
+            if len(data) > 0:
+                _, _, password = data[0]
+                #validacion de contraseña
+                if user.password == password:
+                    response['status'] = 'exito'
+                    response['msg'] = 'datos validados!!!'
+                else:
+                    response['status'] = 'error'
+                    response['msg'] = 'contraseña incorrecta!!!'
+            else:
+                response['status'] = 'error'
+                response['msg'] = 'usuario inexistente!!!'
+            #cerramos la transaccion
+            self._con.commit()
+            return response
+        except conn.Error as e:
+            response['status'] = 'error'
+            response['msg'] = 'error en la validacion!!!'
+            return response
     #******* metodos de atributo *******#
     def isConnected(self)->bool:
         return True if self._con else False

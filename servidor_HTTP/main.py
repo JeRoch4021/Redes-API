@@ -1,7 +1,7 @@
 #zona de imports
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from models.schemas import Post
+from models.schemas import Post, User
 from services.database import DatabaseService
 from typing import List
 
@@ -89,3 +89,13 @@ def update_post(
 def delete_post(post_id:int):
     msg = db_service.deletePost(post_id)
     return {"msg":msg}
+
+#rutas de usuario
+@app.post("/users",tags=["Users"])
+def create_user(user:User):
+    msg = db_service.create_user(user)
+    return {"msg":msg}
+
+@app.post("/users/validate",tags=["Users"])
+def validate_access(user:User):
+    return db_service.validate_access(user)
