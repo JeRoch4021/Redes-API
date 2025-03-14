@@ -48,25 +48,43 @@ def delete_post():
     response = requests.delete(f"{Servidor_URL}/posts/{post_id}")
     print("\nPost eliminado: ", response.json())
 
+#Manejo de usuarios
+
+def create_user():
+    username = input("Ingrese el nombre de usuario: ")
+    password = input("Ingrese la contraseña: ")
+    user_data = {"username": username, "password": password}
+    response = requests.post(f"{Servidor_URL}/users", json=user_data)
+    print("\nRespuesta del servidor: ", response.json())
+
+def validate_access():
+    username = input("Ingrese el nombre de usuario: ")
+    password = input("Ingrese la contraseña: ")
+    user_data = {"username": username, "password": password}
+    response = requests.post(f"{Servidor_URL}/users/validate", json=user_data)
+    print("\nRespuesta del servidor: ", response.json())
+
 def main():
     #Menu interactivo para el usuario pueda elegir la acción a realizar
     print("Cliente HTTP para el Servidor HTTP")
     print("Escribe alguna de las siguientes acciones:")
-    print("- 'see all'  -> Ver todos los posts")
-    print("- 'look for' -> Buscar un post por ID")
+    print("- 'get'  -> Ver todos los posts")
+    print("- 'post' -> Buscar un post por ID")
     print("- 'author'   -> Buscar un post por autor")
     print("- 'create'   -> Crear un nuevo post")
     print("- 'update'   -> Modificar un post")
     print("- 'delete'   -> Borrar un post")
+    print("- 'user' -> Crear un nuevo usuario")
+    print("- 'login'    -> Validar acceso de usuario")
     print("- 'exit'     -> Terminar el programa")
 
     while True:
         #Declaramos la acción que queremos realizar 
         accion = input(f"\n{Servidor_URL}/").strip().lower()
 
-        if accion == "see all":
+        if accion == "get":
             get_posts()
-        elif accion == "look for":
+        elif accion == "post":
             get_post_con_id()
         elif accion == "author":
             get_posts_con_author()
@@ -76,6 +94,10 @@ def main():
             update_post()
         elif accion == "delete":
             delete_post()
+        elif accion == 'user':
+            crear_post()
+        elif accion == 'login':
+            validate_access()
         elif accion == "exit":
             print("Saliendo del programa")
             break
