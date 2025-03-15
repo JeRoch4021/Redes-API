@@ -94,9 +94,9 @@ def main():
             update_post()
         elif accion == "delete":
             delete_post()
-        elif accion == 'user':
+        elif accion == "user":
             crear_post()
-        elif accion == 'login':
+        elif accion == "login":
             validate_access()
         elif accion == "exit":
             print("Saliendo del programa")
