@@ -96,7 +96,7 @@ def main():
             delete_post()
         elif accion == "user":
             crear_post()
-        elif accion == 'login':
+        elif accion == "login":
             validate_access()
         elif accion == "exit":
             print("Saliendo del programa")
