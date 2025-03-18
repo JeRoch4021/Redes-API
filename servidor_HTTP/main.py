@@ -1,8 +1,8 @@
 #zona de imports
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from models.schemas import Post, User
-from services.database import DatabaseService
+from .models.schemas import Post, User
+from .services.database import DatabaseService
 from typing import List
 
 posts = []
