@@ -6,7 +6,7 @@ class DatabaseService:
     SERVER_CONFIG = {
         "user": "root",
         "password": "Isql1706",
-        "port": 3308,
+        "port": 3306,
         "bd": "chatdb"
         }
     #******* metodo constructor *******#
