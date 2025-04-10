@@ -91,7 +91,7 @@ def test_get_post_byauthor(author:str):
 def test_create_post(post_id, author:str, date:str, text:str):
     # Ruta del url
     url = "http://127.0.0.1:8000/posts"
-    # Ingreso de datos a los campos
+    # Ingreso de los datos a los campos
     new_post = {"id": int(post_id), 
                "author": author, 
                "date": date, 
@@ -164,7 +164,7 @@ test_get_posts()
 test_get_post_byid(1)
 test_get_post_byauthor("Ivan Cadena")
 
-# Nuevos metodos asignados
+# Nuevos métodos asignados
 test_create_post(1, "Juan Pérez", "2025-04-07", "Este es un post de prueba")
 test_update_post(1, "Juan Pérez", "2025-05-21", "Este es un cambio en el post")
 test_delete_post(1)
