@@ -84,9 +84,87 @@ def test_get_post_byauthor(author:str):
         print("Prueba exitosa!!!!!")
     except AssertionError as e:
         print("Prueba fracasada!!!!")
-    
-    
+
+# Nuevos método integrados al códigos
+
+# Prueba del método create_post
+def test_create_post(post_id, author:str, date:str, text:str):
+    # Ruta del url
+    url = "http://127.0.0.1:8000/posts"
+    # Ingreso de datos a los campos
+    new_post = {"id": int(post_id), 
+               "author": author, 
+               "date": date, 
+               "text": text}
+    # Petición post
+    response = requests.post(url, json=new_post)
+
+    # Verificación de código
+    assert response.status_code == 201
+    assert response.headers["Content-Type"] == "application/json"
+
+    # Verificación de los campos
+    data = response.json()
+    if "post" in data:
+        post = data["post"]
+        assert post["id"] == new_post["id"]
+        assert post["author"] == new_post["author"]
+        assert post["date"] == new_post["date"]
+        assert post["text"] == new_post["text"]
+
+    assert "msg" in response.json()
+    print(response.json())
+
+# Prueba del método update_post
+def test_update_post(post_id, author:str, date:str, text:str):
+    # Ruta del url
+    url = f"http://127.0.0.1:8000/posts/{post_id}"
+    # Ingreso de los datos a los campos
+    new_update_post = {"id": int(post_id), 
+                       "author": author, 
+                       "date": date, 
+                       "text": text}
+    # Petición put
+    response = requests.put(url, json=new_update_post)
+
+    # Verificación de código
+    assert response.status_code == 200
+    assert response.headers["Content-Type"] == "application/json"
+
+    # Verificación de los campos
+    data = response.json()
+    if "post" in data:
+        post = data["post"]
+        assert post["id"] == new_update_post["id"]
+        assert post["author"] == new_update_post["author"]
+        assert post["date"] == new_update_post["date"]
+        assert post["text"] == new_update_post["text"]
+
+    assert "msg" in response.json()
+    print(response.json())
+   
+# Prueba del método delete_post
+def test_delete_post(post_id):
+    # Ruta del url
+    url = f"http://127.0.0.1:8000/posts/{post_id}"
+
+    # Petición delete
+    response = requests.delete(url)
+
+    # Verificación de código
+    assert response.status_code == 204
+    assert response.text == ""
+
+    assert "msg" in response.json()
+    print(response.json())
+
+
 #llamadas de funciones
 test_get_posts()
 test_get_post_byid(1)
 test_get_post_byauthor("Ivan Cadena")
+
+# Nuevos metodos asignados
+test_create_post(1, "Juan Pérez", "2025-04-07", "Este es un post de prueba")
+test_update_post(1, "Juan Pérez", "2025-05-21", "Este es un cambio en el post")
+test_delete_post(1)
