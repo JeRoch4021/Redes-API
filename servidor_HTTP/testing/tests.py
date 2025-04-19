@@ -168,3 +168,13 @@ test_get_post_byauthor("Ivan Cadena")
 test_create_post(1, "Juan Pérez", "2025-04-07", "Este es un post de prueba")
 test_update_post(1, "Juan Pérez", "2025-05-21", "Este es un cambio en el post")
 test_delete_post(1)
+
+#prueba creater_user
+def test_create_user(requests_mock):
+    url = "http://localhost:5000/users"
+    mock_response = {"message": "Usuario creado exitosamente"}
+    
+    requests_mock.post(url, json=mock_response)
+    result = client.create_user("juan", "1234", "http://localhost:5000")
+    
+    assert result == mock_response
