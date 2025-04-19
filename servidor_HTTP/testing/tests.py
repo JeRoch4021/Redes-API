@@ -178,3 +178,12 @@ def test_create_user(requests_mock):
     result = client.create_user("juan", "1234", "http://localhost:5000")
     
     assert result == mock_response
+#prueba validate_access
+def test_validate_access(requests_mock):
+    url = "http://localhost:5000/users/validate"
+    mock_response = {"message": "Acceso concedido"}
+    
+    requests_mock.post(url, json=mock_response)
+    result = client.validate_access("juan", "1234", "http://localhost:5000")
+    
+    assert result == mock_response
