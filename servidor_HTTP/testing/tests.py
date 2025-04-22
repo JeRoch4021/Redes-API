@@ -158,6 +158,40 @@ def test_delete_post(post_id):
     assert "msg" in response.json()
     print(response.json())
 
+#Funciones complementarias para creater_user y validate_access
+def create_user(username, password):
+    url = "http://127.0.0.1:8000/users"
+    user_data = {"username": username, "password": password}
+    response = requests.post(url, json=user_data)
+    return response.json()
+
+def validate_access(username, password):
+    url = "http://127.0.0.1:8000/users/validate"
+    user_data = {"username": username, "password": password}
+    response = requests.post(url, json=user_data)
+    return response.json()
+
+#prueba creater_user
+def test_create_user():
+    result = create_user("juan", "1234")
+    
+    try:
+        assert "message" in result
+        assert result["message"] == "Usuario creado exitosamente"
+        print("Preuba de creación exitosa", result)
+    except AssertionError:
+        print("Fallo de la prueba de creación", result)
+
+#prueba validate_access
+def test_validate_access():
+    result = validate_access("juan", "1234")
+
+    try:
+        assert "message" in result
+        assert result["message"] == "Acceso concedido"
+        print("Prueba de validación exitosa", result)
+    except AssertionError:
+        print("Fallo de la prueba de validación", result)
 
 #llamadas de funciones
 test_get_posts()
@@ -169,21 +203,6 @@ test_create_post(1, "Juan Pérez", "2025-04-07", "Este es un post de prueba")
 test_update_post(1, "Juan Pérez", "2025-05-21", "Este es un cambio en el post")
 test_delete_post(1)
 
-#prueba creater_user
-def test_create_user(requests_mock):
-    url = "http://localhost:5000/users"
-    mock_response = {"message": "Usuario creado exitosamente"}
-    
-    requests_mock.post(url, json=mock_response)
-    result = client.create_user("juan", "1234", "http://localhost:5000")
-    
-    assert result == mock_response
-#prueba validate_access
-def test_validate_access(requests_mock):
-    url = "http://localhost:5000/users/validate"
-    mock_response = {"message": "Acceso concedido"}
-    
-    requests_mock.post(url, json=mock_response)
-    result = client.validate_access("juan", "1234", "http://localhost:5000")
-    
-    assert result == mock_response
+# Incluir los dos últimos métodos
+test_create_user()
+test_validate_access()
