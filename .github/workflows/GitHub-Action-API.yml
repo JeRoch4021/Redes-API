@@ -28,5 +28,5 @@ jobs:
 
     - name: Ejecutar pruebas
       run: |
-        export PYTHONPATH=$(pwd)
+        export PYTHONPATH=$PYTHONPATH:$(pwd)/servidor_HTTP:$(pwd)
         pytest
