@@ -1,9 +1,6 @@
 import requests
 import pytest
 
-# Fixtures
-@pytest.fixture
-
 #prueba de rutas get
 def test_get_posts():
     #ruta del api
@@ -34,8 +31,9 @@ def test_get_posts():
         print("Prueba fracasada!!!!")
 
 #prueba de get post por id
-def test_get_post_byid(id:int):
+def test_get_post_byid():
     #ruta del servidor
+    id = 1
     url = f"http://127.0.0.1:8000/post/{id}"
     
     #peticion al servidor
@@ -61,7 +59,8 @@ def test_get_post_byid(id:int):
     except AssertionError as e:
         print("Prueba fracasada!!!!!")
         
-def test_get_post_byauthor(author:str):
+def test_get_post_byauthor():
+    author = "Ivan Cadena"
     #ruta del api
     url = f"http://127.0.0.1:8000/post/?author={author}"
     
@@ -92,7 +91,11 @@ def test_get_post_byauthor(author:str):
 # Nuevos método integrados al códigos
 
 # Prueba del método create_post
-def test_create_post(post_id, author:str, date:str, text:str):
+def test_create_post():
+    post_id = 1 
+    author:str = "Juan Pérez"
+    date:str = "2025-04-07"
+    text:str = "Este es un post de prueba"
     # Ruta del url
     url = "http://127.0.0.1:8000/posts"
     # Ingreso de los datos a los campos
@@ -120,7 +123,11 @@ def test_create_post(post_id, author:str, date:str, text:str):
     print(response.json())
 
 # Prueba del método update_post
-def test_update_post(post_id, author:str, date:str, text:str):
+def test_update_post():
+    post_id = 1
+    author:str = "Juan Pérez"
+    date:str = "2025-05-21"
+    text:str = "Este es un cambio en el post"
     # Ruta del url
     url = f"http://127.0.0.1:8000/posts/{post_id}"
     # Ingreso de los datos a los campos
@@ -148,7 +155,8 @@ def test_update_post(post_id, author:str, date:str, text:str):
     print(response.json())
    
 # Prueba del método delete_post
-def test_delete_post(post_id):
+def test_delete_post():
+    post_id = 1
     # Ruta del url
     url = f"http://127.0.0.1:8000/posts/{post_id}"
 
@@ -197,16 +205,3 @@ def test_validate_access():
     except AssertionError:
         print("Fallo de la prueba de validación", result)
 
-#llamadas de funciones
-test_get_posts()
-test_get_post_byid(1)
-test_get_post_byauthor("Ivan Cadena")
-
-# Nuevos métodos asignados
-test_create_post(1, "Juan Pérez", "2025-04-07", "Este es un post de prueba")
-test_update_post(1, "Juan Pérez", "2025-05-21", "Este es un cambio en el post")
-test_delete_post(1)
-
-# Incluir los dos últimos métodos
-test_create_user()
-test_validate_access()
