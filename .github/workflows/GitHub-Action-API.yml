@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout del código
     - uses: actions/checkout@v4
 
     - name: Probar Python
@@ -28,4 +27,14 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Run test
       run: |
+        # Levantar el servidor en segundo plano
+        uvicorn servidor_HTTP.main:app --port 8000 &
+        # Guardar el PID para matarlo despues
+        SERVER_PID=$!
+        # Esperar a que el servidor este listo
+        sleep 3
+        # Ejecutar lo tests
         pytest
+        # Matar el servidor
+        # Agrepo etiqueta
+        kill $SERVER_PID
