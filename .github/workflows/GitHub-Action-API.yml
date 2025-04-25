@@ -43,5 +43,5 @@ jobs:
         # Ejecutar lo tests
         pytest
         # Matar el servidor
-        # Agrepo etiqueta
+        # Agrego etiqueta
         kill $SERVER_PID
