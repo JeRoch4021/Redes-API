@@ -1,5 +1,4 @@
 import requests
-import pytest
 
 #prueba de rutas get
 def test_get_posts():
