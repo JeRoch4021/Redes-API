@@ -1,6 +1,7 @@
 import requests
 import pytest
 
+# Fixtures
 @pytest.fixture
 
 #prueba de rutas get
