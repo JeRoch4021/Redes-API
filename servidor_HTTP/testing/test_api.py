@@ -1,12 +1,15 @@
-import requests
+from fastapi.testclient import TestClient
+from servidor_HTTP.main import app
+
+cliente = TestClient(app)
 
 #prueba de rutas get
 def test_get_posts():
     #ruta del api
-    url = "http://127.0.0.1:8000/posts"
+    #url = "http://127.0.0.1:8000/posts"
     
     #peticion get
-    response = requests.get(url)
+    response = cliente.get("/posts")
     
     try:
         #verificamos el codigo
@@ -33,10 +36,10 @@ def test_get_posts():
 def test_get_post_byid():
     #ruta del servidor
     id = 1
-    url = f"http://127.0.0.1:8000/post/{id}"
+    #url = f"http://127.0.0.1:8000/post/{id}"
     
     #peticion al servidor
-    response = requests.get(url)
+    response = cliente.get(f"/post/{id}")
     
     try:
         #validacion de codigo
@@ -61,10 +64,10 @@ def test_get_post_byid():
 def test_get_post_byauthor():
     author = "Ivan Cadena"
     #ruta del api
-    url = f"http://127.0.0.1:8000/post/?author={author}"
+    #url = f"http://127.0.0.1:8000/post/?author={author}"
     
     #peticion get
-    response = requests.get(url)
+    response = cliente.get(f"/post/?author={author}")
     
     try:
         #verificamos el codigo
@@ -96,14 +99,14 @@ def test_create_post():
     date:str = "2025-04-07"
     text:str = "Este es un post de prueba"
     # Ruta del url
-    url = "http://127.0.0.1:8000/posts"
+    #url = "http://127.0.0.1:8000/posts"
     # Ingreso de los datos a los campos
     new_post = {"id": int(post_id), 
                "author": author, 
                "date": date, 
                "text": text}
     # Petición post
-    response = requests.post(url, json=new_post)
+    response = cliente.post("/posts", json=new_post)
 
     # Verificación de código
     assert response.status_code == 201
@@ -113,13 +116,9 @@ def test_create_post():
     data = response.json()
     if "post" in data:
         post = data["post"]
-        assert post["id"] == new_post["id"]
-        assert post["author"] == new_post["author"]
-        assert post["date"] == new_post["date"]
-        assert post["text"] == new_post["text"]
-
-    assert "msg" in response.json()
-    print(response.json())
+        assert post == new_post
+    assert "msg" in data
+    print(data)
 
 # Prueba del método update_post
 def test_update_post():
@@ -128,14 +127,14 @@ def test_update_post():
     date:str = "2025-05-21"
     text:str = "Este es un cambio en el post"
     # Ruta del url
-    url = f"http://127.0.0.1:8000/posts/{post_id}"
+    #url = f"http://127.0.0.1:8000/posts/{post_id}"
     # Ingreso de los datos a los campos
     new_update_post = {"id": int(post_id), 
                        "author": author, 
                        "date": date, 
                        "text": text}
     # Petición put
-    response = requests.put(url, json=new_update_post)
+    response = cliente.put(f"/posts/{post_id}", json=new_update_post)
 
     # Verificación de código
     assert response.status_code == 200
@@ -145,41 +144,34 @@ def test_update_post():
     data = response.json()
     if "post" in data:
         post = data["post"]
-        assert post["id"] == new_update_post["id"]
-        assert post["author"] == new_update_post["author"]
-        assert post["date"] == new_update_post["date"]
-        assert post["text"] == new_update_post["text"]
-
-    assert "msg" in response.json()
-    print(response.json())
+        assert post == new_update_post
+    assert "msg" in data
+    print(data)
    
 # Prueba del método delete_post
 def test_delete_post():
     post_id = 1
     # Ruta del url
-    url = f"http://127.0.0.1:8000/posts/{post_id}"
+    #url = f"http://127.0.0.1:8000/posts/{post_id}"
 
     # Petición delete
-    response = requests.delete(url)
+    response = cliente.delete(f"/posts/{post_id}")
 
     # Verificación de código
     assert response.status_code == 204
     assert response.text == ""
 
-    assert "msg" in response.json()
-    print(response.json())
-
 #Funciones complementarias para creater_user y validate_access
 def create_user(username, password):
-    url = "http://127.0.0.1:8000/users"
+    #url = "http://127.0.0.1:8000/users"
     user_data = {"username": username, "password": password}
-    response = requests.post(url, json=user_data)
+    response = cliente.post("/users", json=user_data)
     return response.json()
 
 def validate_access(username, password):
-    url = "http://127.0.0.1:8000/users/validate"
+    #url = "http://127.0.0.1:8000/users/validate"
     user_data = {"username": username, "password": password}
-    response = requests.post(url, json=user_data)
+    response = cliente.post("/users/validate", json=user_data)
     return response.json()
 
 #prueba creater_user
