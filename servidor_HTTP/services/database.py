@@ -5,7 +5,7 @@ from models.schemas import Post, User
 class DatabaseService:
     SERVER_CONFIG = {
         "user": "root",
-        "password": "Isql1706",
+        "password": "JeR0204&&T411erBD",
         "port": 3306,
         "bd": "chatdb"
         }

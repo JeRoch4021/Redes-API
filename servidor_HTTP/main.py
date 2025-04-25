@@ -1,8 +1,10 @@
 # zona de imports
+import os
 from typing import List
 
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from models.schemas import Post, User
 from services.database import DatabaseService
@@ -18,7 +20,6 @@ app.version = "0.0.1"
 
 # servicios
 db_service = DatabaseService()
-
 
 # rutas y funciones
 # ruta principal
@@ -43,10 +44,7 @@ def get_home() -> HTMLResponse:
 # ruta get principal
 @app.get("/posts", tags=["Posts"])
 def get_posts() -> List[Post]:
-    return HTMLResponse(
-        "<h1>ahora si a desarrollar y ejecutar el codigo dentro del container!!</h1>"
-    )
-    # return db_service.getPosts()
+    return db_service.getPosts()
 
 
 # ruta con parametros
