@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
 
     - name: Probar Python
       uses: actions/setup-python@v4
@@ -25,16 +25,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest requests uvicorn
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
     - name: Run test
       run: |
-        # Levantar el servidor en segundo plano
-        uvicorn servidor_HTTP.main:app --port 8000 &
-        # Guardar el PID para matarlo despues
-        SERVER_PID=$!
-        # Esperar a que el servidor este listo
-        sleep 3
-        # Ejecutar lo tests
         pytest
-        # Matar el servidor
-        # Agrepo etiqueta
-        kill $SERVER_PID
