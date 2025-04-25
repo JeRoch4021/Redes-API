@@ -28,4 +28,5 @@ jobs:
 
     - name: Ejecutar pruebas
       run: |
+        export PYTHONPATH=$(pwd)
         pytest
