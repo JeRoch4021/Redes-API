@@ -35,7 +35,7 @@ jobs:
     - name: Run test
       run: |
         # Levantar el servidor en segundo plano
-        uvicorn servidor_HTTP.main:app --port 8000 &
+        uvicorn servidor_HTTP.main:app &
         # Guardar el PID para matarlo despues
         SERVER_PID=$!
         # Esperar a que el servidor este listo
