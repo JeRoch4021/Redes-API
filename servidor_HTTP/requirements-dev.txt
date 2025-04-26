@@ -3,3 +3,7 @@ uvicorn[standard]
 mysql-connector-python
 black
 isort
+httpx
+mock
+coverage
+pytest-cov

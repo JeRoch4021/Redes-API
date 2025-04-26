@@ -72,12 +72,14 @@ class DatabaseService:
             post = Post(id=data[0][0],author=data[0][1],date=str(data[0][2]),text=data[0][3])
                 
             #guardamos los cambios
-            self._con.commit()
+            # self._con.commit()
             
             #retorno de datos
             return post
-        except conn.Error | IndexError as e:
-            return None
+        except Exception as error:
+            raise error
+        except conn.Error | IndexError as databaseError:
+            raise databaseError
         
     def getPostByAuthor(self, author:str)->list:
         #tratamiento de excepcion
@@ -109,7 +111,7 @@ class DatabaseService:
         except conn.Error as e:
             return []
         
-    def createPost(self, post:Post)->str:
+    def createPost(self, post:Post)->dict:
         #tratamiento de errores
         try:
             #puntero a conexion
@@ -117,7 +119,7 @@ class DatabaseService:
             
             #sentencia de creacion
             sentencia = "insert into messages (user_id, message, message_date) values (%s,%s,%s)"
-            parametros = (int(post.author),post.text,post.date)
+            parametros = (int(post.author), post.text, post.date)
             
             #ejecucion de la sentencia
             cursor.execute(sentencia,parametros)
@@ -126,7 +128,8 @@ class DatabaseService:
             self._con.commit()
             return "exito al crear!!!"
         except conn.Error as e:
-            return "error al crear!!!"
+            print(f"Error creando post: {e}")
+            return None
         
     def updatePost(self, post_id, post:Post)->str:
         #tratamiento de error
@@ -136,7 +139,7 @@ class DatabaseService:
             
             #sentencia de actualizacion
             sentencia = "update messages set message = %s, message_date = %s where id = %s"
-            parametros = (post.text,post.date,post_id)
+            parametros = (post.text, post.date, post_id)
             
             #ejecucion de la sentencia
             cursor.execute(sentencia, parametros)
@@ -145,7 +148,8 @@ class DatabaseService:
             self._con.commit()
             return "exito al actualizar!!!"
         except conn.Error as e:
-            return "error al actualizar!!!"
+            print(f"Error al actualizar post: {e}")
+            return None
         
     def deletePost(self, post_id:int)->str:
         try:
@@ -162,7 +166,8 @@ class DatabaseService:
             self._con.commit()
             return "exito al eliminar!!!"
         except conn.Error as e:
-            return "error al eliminar!!!"
+            print(f"Error al eliminarr post: {e}")
+            return None
         
     def create_user(self, user:User)->str:
         #tratamiento de errores
@@ -181,7 +186,8 @@ class DatabaseService:
             self._con.commit()
             return "exito al crear!!!"
         except conn.Error as e:
-            return "error al crear!!!"
+            print(f"Error al crear usuario: {e}")
+            return None
         
     def validate_access(self, user:User)->dict:
         response = dict()
@@ -217,6 +223,7 @@ class DatabaseService:
             response['status'] = 'error'
             response['msg'] = 'error en la validacion!!!'
             return response
+        
     #******* metodos de atributo *******#
     def isConnected(self)->bool:
         return True if self._con else False

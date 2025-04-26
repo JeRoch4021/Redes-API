@@ -1,5 +1,4 @@
 from typing import Optional
-
 from pydantic import BaseModel
 
 
@@ -15,6 +14,6 @@ class Post(BaseModel):
 # modelo de usuario
 class User(BaseModel):
     # atributos
-    id: int
+    id: Optional[int] = None # campo opcional
     username: str
     password: str

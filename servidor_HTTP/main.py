@@ -2,9 +2,10 @@
 import os
 from typing import List
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi import status
 
 from models.schemas import Post, User
 from services.database import DatabaseService
@@ -52,9 +53,11 @@ def get_posts() -> List[Post]:
 def get_post(post_id: int) -> Post:
     # busqueda de post
     post = db_service.getPost(post_id)
-    if post:
-        return post
-    return {"msg": "post not found"}
+
+    if not post:
+        raise HTTPException(detail="Post no encontrado", status_code=404)
+    
+    return post
 
 
 # ruta con parametros normal y query (clave-valor)
@@ -62,11 +65,15 @@ def get_post(post_id: int) -> Post:
 def get_postq(author: str) -> List[Post]:
     # retorno de lista con los posts
     aposts = db_service.getPostByAuthor(author)
+
+    if not aposts:
+        raise HTTPException(detail="Autor no encontrado", status_code=404)
+        
     return aposts
 
 
 # ruta post para subir un nuevo post
-@app.post("/posts", tags=["Posts"])
+@app.post("/posts", status_code=201)
 def create_post(
     # body ayuda a convertir los valores a valores dentro del cuerpo de la peticion
     # id:int = Body(),
@@ -77,8 +84,12 @@ def create_post(
 ):
     # volcar el modelo a diccionario
     # posts.append(post.model_dump())
-    msg = db_service.createPost(post)
-    return {"msg": msg}
+    post_creado = db_service.createPost(post)
+    
+    if not post_creado:
+        raise HTTPException(detail="Error al crear el post", status_code=500)
+    else:
+        return {"post": post_creado}
 
 
 # ruta put para modificar los datos de un post
@@ -90,24 +101,47 @@ def update_post(
     # post:str = Body()
     post: Post,
 ):
-    msg = db_service.updatePost(post_id, post)
-    return {"msg": msg}
+    post_modificado = db_service.updatePost(post_id, post)
+
+    if not post_modificado:
+        raise HTTPException(detail="El post no se pudo actualizar", status_code=404)
+    else:
+        return {"post": post_modificado}
 
 
 # ruta delete para un post
-@app.delete("/posts/{post_id}", tags=["Posts"])
+@app.delete("/posts/{post_id}", status_code=204)
 def delete_post(post_id: int):
-    msg = db_service.deletePost(post_id)
-    return {"msg": msg}
+    post_borrado = db_service.deletePost(post_id)
+
+    if not post_borrado:
+        raise HTTPException(detail="Post no encontrado", status_code=404)
+    
+    if post_borrado == "Error":
+        raise HTTPException(detail="Error al eliminar el post", status_code=500)
+
+    return {"post": post_borrado}
 
 
 # rutas de usuario
 @app.post("/users", tags=["Users"])
 def create_user(user: User):
-    msg = db_service.create_user(user)
-    return {"msg": msg}
+    post_crear_usuario = db_service.create_user(user.username, user.password)
+
+    if post_crear_usuario == "Usuario ya existe":
+        raise HTTPException(detail="El usuario ya existe", status_code=409)
+    
+    if not post_crear_usuario:
+        raise HTTPException(detail="Error al crear el usuario", status_code=400)
+
+    return {"mensaje": post_crear_usuario}
 
 
 @app.post("/users/validate", tags=["Users"])
 def validate_access(user: User):
-    return db_service.validate_access(user)
+    post_validar_acceso = db_service.validate_access(user.username, user.password)
+
+    if not post_validar_acceso:
+        raise HTTPException(detail="Acceso denegado", status_code=401)
+    
+    return {"mensaje": "Acceso concedido"}
