@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: check out the repo
+    - name: Checkout the repo
       uses: actions/checkout@v4.2.2
 
     - name: Probar Python
@@ -23,6 +23,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install fastapi httpx mock coverage pytest-cov mysql-connector-python
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
     - name: Ejecutar pruebas
       run: |
         export PYTHONPATH=$PYTHONPATH:./servidor_HTTP
@@ -37,13 +38,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: login to dockerhub
+    - name: Checkout del repositorio
+      uses: actions/checkout@v4.2.2
+
+    - name: Login para dockerhub
       uses: docker/login-action@v3.4.0
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_REDES_API }}
 
-    - name: Build and push to dockerhub
+    - name: Build and push para dockerhub
       uses: docker/build-push-action@v6.16.0
       with:
         context: ./servidor_HTTP
