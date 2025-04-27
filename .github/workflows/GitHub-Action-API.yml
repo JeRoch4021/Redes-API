@@ -46,7 +46,7 @@ jobs:
     - name: Build and push to dockerhub
       uses: docker/build-push-action@v6.16.0
       with:
-        context: ./src/servidor_HTTP
-        file: ./src/servidor_HTTP/Dockerfile
+        context: ./servidor_HTTP
+        file: ./servidor_HTTP/Dockerfile
         push: true
         tags: jeshuarocha/red_api:latest
