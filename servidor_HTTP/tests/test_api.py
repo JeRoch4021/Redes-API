@@ -2,7 +2,6 @@ from unittest.mock import patch, ANY
 from fastapi.testclient import TestClient
 from servidor_HTTP.main import app
 from servidor_HTTP.models.schemas import Post
-from servidor_HTTP.services.database import DatabaseService
 
 cliente = TestClient(app)
 
