@@ -25,6 +25,7 @@ jobs:
 
     - name: Ejecutar pruebas
       run: |
+        export PYTHONPATH=$PYTHONPATH:./servidor_HTTP
         coverage run -m pytest -v -s
 
     - name: Generar un reporte Coverage
