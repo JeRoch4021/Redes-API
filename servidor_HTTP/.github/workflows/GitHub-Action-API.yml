@@ -25,7 +25,7 @@ jobs:
 
     - name: Ejecutar pruebas
       run: |
-        coverage run -m pytest src/servidor_HTTP/tests/test_api.py -v -s
+        coverage run -m pytest -v -s
 
     - name: Generar un reporte Coverage
       run: |
