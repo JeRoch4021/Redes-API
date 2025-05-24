@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql:8.0
+        image: mysql:latest
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: "JeR0204&&T411erBD"
@@ -24,10 +24,10 @@ spec:
         ports:
         - containerPort: 3306
         volumeMounts:
-        - name: mysql-persistencia-almacenamiento
+        - name: mysql-persisten-storage
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistencia-almacenamiento
+      - name: mysql-persisten-storage
         emptyDir: {}
 ---
 apiVersion: v1
