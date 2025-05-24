@@ -1,23 +1,27 @@
+import os
 from mysql import connector as conn
 from models.schemas import Post, User
 
 #objeto de conexion
 class DatabaseService:
     SERVER_CONFIG = {
-        "user": "root",
-        "password": "JeR0204&&T411erBD",
-        "port": 3306,
-        "bd": "chatdb"
-        }
+        "user": os.getenv("DATABASE_USER", "root"),
+        "password": os.getenv("DATABASE_PASSWORD", "JeR0204&&T411erBD"),
+        "port": os.getenv("DATABASE_PORT", 3306),
+        "bd": os.getenv("DATABASE_NAME", "chatdb"),
+        "host": os.getenv("DATABASE_HOST", "localhost")
+    }
     #******* metodo constructor *******#
     def __init__(self)->None:
         #tratamiento de excepcion
         try:
-            self._con = conn.connect(user=DatabaseService.SERVER_CONFIG['user'],
-                                 password=DatabaseService.SERVER_CONFIG['password'],
-                                 database=DatabaseService.SERVER_CONFIG['bd'],
-                                 port=DatabaseService.SERVER_CONFIG['port']
-                                )
+            self._con = conn.connect(
+                user=DatabaseService.SERVER_CONFIG['user'],
+                password=DatabaseService.SERVER_CONFIG['password'],
+                database=DatabaseService.SERVER_CONFIG['bd'],
+                port=int(DatabaseService.SERVER_CONFIG['port']),
+                host=DatabaseService.SERVER_CONFIG['host']
+            )
         except conn.Error as e:
             self._con = None
             print(e)

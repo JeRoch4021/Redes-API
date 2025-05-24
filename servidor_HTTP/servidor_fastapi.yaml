@@ -61,25 +61,30 @@ spec:
     spec:
       containers:
       - name: fastapi-server
-        image: jeshuarocha/red_api:latest
+        image: jeshuarocha/fastapi-server:latest
         ports:
         - containerPort: 8000
         env:
-        - name: DATABASE_URL
-          value: "mysql://root:JeR0204&&T411erBD@mysql-service:3306/chatdb"
         - name: DATABASE_USER
           value: "root"
         - name: DATABASE_PASSWORD
           value: "JeR0204&&T411erBD"
+        - name: DATABASE_PORT
+          value: "3306"
+        - name: DATABASE_NAME
+          value: "chatdb"
+        - name: DATABASE_HOST
+          value: "mysql-service"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: fastapi-server-service
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
   - port: 8000
     targetPort: 8000
+    nodePort: 30080
   selector:
     app: fastapi-server
