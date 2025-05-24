@@ -20,6 +20,7 @@ class DatabaseService:
                                 )
         except conn.Error as e:
             self._con = None
+            print(e)
     #******* metodos de instancia *******#
     def getPosts(self)->list:
         #tratamiento de excepcion
