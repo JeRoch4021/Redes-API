@@ -13,5 +13,5 @@ services:
     ports:
       - "3308:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=Isql1706
+      - MYSQL_ROOT_PASSWORD=JeR0204&&T411erBD
 

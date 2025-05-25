@@ -1,15 +1,14 @@
-import os
 from mysql import connector as conn
 from models.schemas import Post, User
 
 #objeto de conexion
 class DatabaseService:
     SERVER_CONFIG = {
-        "user": os.getenv("DATABASE_USER", "root"),
-        "password": os.getenv("DATABASE_PASSWORD", "JeR0204&&T411erBD"),
-        "port": os.getenv("DATABASE_PORT", 3306),
-        "bd": os.getenv("DATABASE_NAME", "chatdb"),
-        "host": os.getenv("DATABASE_HOST", "localhost")
+        "user": "root",
+        "password": "JeR0204&&T411erBD",
+        "port": 3306,
+        "bd": "chatdb",
+        "host": "mysql8"
     }
     #******* metodo constructor *******#
     def __init__(self)->None:
