@@ -14,4 +14,4 @@ RUN pip install -r requirements-dev.txt
 EXPOSE 8000
 
 # Comando para ejecutar FastAPI
-ENTRYPOINT [ "uvicorn", "--host", "0.0.0.0", "main:app", "--reload", "--port", "8000" ]
+ENTRYPOINT [ "uvicorn", "--host", "0.0.0.0", "main:app", "--reload", "--port", "8000", "--log-level", "debug" ]

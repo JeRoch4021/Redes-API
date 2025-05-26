@@ -1,0 +1,5 @@
+2025-05-26 00:54:20,009 | DEBUG | ocurrio un error en la base
+2025-05-26 00:54:20,009 | INFO | iniciando servidor
+2025-05-26 00:54:20,009 | DEBUG | imprimiendo las variables de ambiente
+2025-05-26 00:54:20,009 | WARNING | libreria deprecada favor de actualizar
+2025-05-26 00:54:20,009 | DEBUG | algo malo paso

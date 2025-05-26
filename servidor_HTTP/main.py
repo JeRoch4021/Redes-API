@@ -1,5 +1,6 @@
 # zona de imports
 import os
+import logging
 from typing import List
 
 from fastapi import FastAPI, HTTPException, Response
@@ -14,6 +15,16 @@ posts = []
 
 # aplicacion
 app = FastAPI()
+
+# configuracion del loggin level del servidor
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+
+logging.basicConfig(
+    level=getattr(logging, log_level, logging.INFO),
+    format="%(asctime)s | %(levelname)s | %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 # documentacion de la aplicacion
 app.title = "Servidor http con fastapi"
@@ -36,6 +47,7 @@ def get_home() -> HTMLResponse:
                 """
     if db_service.isConnected():
         response += f"<h2>Conectado a base de datos!!!!</h2>"
+        logger.debug("esta es la pagina web!!!")
     else:
         response += f"<h2>No hay conexion a base de datos!!!!</h2>"
     # puede retornar un json (dict) o str o html

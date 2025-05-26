@@ -1,29 +1,64 @@
+import os
 from mysql import connector as conn
 from models.schemas import Post, User
 
+import logging
+
+# Configure logging
+# logging.basicConfig(
+#     level=logging.DEBUG,
+#     format="%(asctime)s | %(levelname)s | %(message)s"
+# )
+
+logger = logging.getLogger(__name__)
+
 #objeto de conexion
 class DatabaseService:
-    SERVER_CONFIG = {
-        "user": "root",
-        "password": "JeR0204&&T411erBD",
-        "port": 3306,
-        "bd": "chatdb",
-        "host": "mysql8"
-    }
+    # SERVER_CONFIG = {
+    #     "user": "root",
+    #     "password": "JeR0204&&T411erBD",
+    #     "port": 3306,
+    #     "bd": "chatdb",
+    #     "host": "mysql8"
+    # }
     #******* metodo constructor *******#
     def __init__(self)->None:
+
         #tratamiento de excepcion
         try:
+            DATABASE_HOST = os.getenv("DATABASE_HOST", "mysql8")
+            DATABASE_USER = os.getenv("DATABASE_USER", "root")
+            DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", "JeR0204&&T411erBD")
+            DATABASE_NAME = os.getenv("DATABASE_NAME", "chatdb")
+            DATABASE_PORT = os.getenv("DATABASE_PORT", "3306")
+            logger.debug(f"""
+                Mis Variables de ambiente!!!!!
+                    DATABASE_USER = {DATABASE_USER}
+                    DATABASE_PASSWORD = {DATABASE_PASSWORD}
+                    DATABASE_PORT = {DATABASE_PORT}
+                    DATABASE_NAME = {DATABASE_NAME}
+                    DATABASE_HOST = {DATABASE_HOST}
+            """)
+            
+            # self._con = conn.connect(
+            #     user=DatabaseService.SERVER_CONFIG['user'],
+            #     password=DatabaseService.SERVER_CONFIG['password'],
+            #     database=DatabaseService.SERVER_CONFIG['bd'],
+            #     port=int(DatabaseService.SERVER_CONFIG['port']),
+            #     host=DatabaseService.SERVER_CONFIG['host']
+            # )
+
             self._con = conn.connect(
-                user=DatabaseService.SERVER_CONFIG['user'],
-                password=DatabaseService.SERVER_CONFIG['password'],
-                database=DatabaseService.SERVER_CONFIG['bd'],
-                port=int(DatabaseService.SERVER_CONFIG['port']),
-                host=DatabaseService.SERVER_CONFIG['host']
+                host=DATABASE_HOST,
+                user=DATABASE_USER,
+                password=DATABASE_PASSWORD,
+                database=DATABASE_NAME,
+                port=int(DATABASE_PORT),
             )
         except conn.Error as e:
             self._con = None
-            print(e)
+            # print(e)
+            logger.error("An error occurred while starting the connection with the database")
     #******* metodos de instancia *******#
     def getPosts(self)->list:
         #tratamiento de excepcion
